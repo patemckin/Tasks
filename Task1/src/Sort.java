@@ -30,5 +30,4 @@ public class Sort {
             out.printf("%g ", arr[i]);
         out.println();
     }
-
 }
