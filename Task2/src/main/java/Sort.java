@@ -1,15 +1,16 @@
-import static java.lang.Math.*;
+import java.util.Comparator;
+
 import static java.lang.System.out;
 
 
-public class Sort {
-    double compare(Point a, Point b){
-        return sqrt(((Point.getX())^2 + (Point.getY())^2));
-    }
+public class Sort<T> implements Sortings<T> {
+    //double compare(Point a, Point b){
+      //  return a.getX()^2 + a.getY()^2 - b.getX()^2 - b.getY()^2;
+    //}
 
     public static void main(String[] args) {
         double a[] = parseString(args);
-        sort(a);
+        //sort(a);
         printArray(a);
     }
 
@@ -21,15 +22,16 @@ public class Sort {
         return result;
     }
 
-    public static boolean sort(double arr[]) {
-        for (int j = 1; j < arr.length; ++j) {
-            double key = arr[j];
+    public T[] sort(T[] arr, Comparator<T> comparator) {
+        T[] result = arr;
+        for (int j = 1; j < result.length; ++j) {
+            T key = result[j];
             int i = j - 1;
-            while (i >= 0 && arr[i] > key)
-                arr[i + 1] = arr[i--];
-            arr[i + 1] = key;
+            while (i >= 0 && (comparator.compare(result[i],key)>= 0))
+                result[i + 1] = result[i--];
+            result[i + 1] = key;
         }
-        return true;
+        return result;
     }
 
     public static void printArray(double arr[]) {
