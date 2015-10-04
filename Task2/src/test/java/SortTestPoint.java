@@ -14,26 +14,9 @@ import java.util.Collection;
 import java.util.Comparator;
 
 @RunWith(Parameterized.class)
-public class SortTest {
+public class SortTestPoint {
     private static final Sort SORT = new Sort();
-    private static Object[][] TEST_DATA = {
-            {SORT, new Double[]{1.0, 2.0, 3.0}},
-            {SORT, new Double[]{3.0, 2.0, 1.0}},
-            {SORT, new Double[]{1., 1., 1.}},
-            {SORT, new Double[]{-100., 34., 43., -12052.5}},
 
-    };
-    private static final Comparator<Double> DOUBLE_COMPARATOR1 = new Comparator<Double>() {
-        public int compare(final Double d1, final Double d2) {
-            return d1.compareTo(d2);
-        }
-    };
-
-    private static final Comparator<Double> DOUBLE_COMPARATOR2 = new Comparator<Double>() {
-        public int compare(final Double o1, final Double o2) {
-            return o2.compareTo(o1);
-        }
-    };
     private static final Comparator<Point> POINT_COMPARATOR = new Comparator<Point>(){
         public int compare(final Point p1,final Point p2){
             Integer temp = p1.getX();
@@ -44,14 +27,20 @@ public class SortTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
+        Object[][] TEST_DATA = {
+                {SORT, new Double[]{1.0, 2.0, 3.0}},
+                {SORT, new Double[]{3.0, 2.0, 1.0}},
+                {SORT, new Double[]{1., 1., 1.}},
+                {SORT, new Double[]{-100., 34., 43., -12052.5}},
 
+        };
         return Arrays.asList(TEST_DATA);
     }
 
     private Sort<Double> sort;
-    private Double[] input;
+    private Point[] input;
 
-    public SortTest(Sort<Double> sort, Double[] input) {
+    public SortTestPoint(Sort<Double> sort, Point[] input) {
         this.sort = sort;
         this.input = input;
     }
