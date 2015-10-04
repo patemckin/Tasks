@@ -1,7 +1,3 @@
-/**
- * Created by admin on 03/10/15.
- */
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,13 +33,14 @@ public class SortTestPoint {
         Random rand = new Random();
         Point[][] points = new Point[5][5];
         for (int i = 0; i < 5; ++i) {
-            points[1][i] = new Point(i, 0);
-            points[2][i] = new Point(0, i);
-            points[3][i] = new Point(5 - i, 0);
-            points[4][i] = new Point(i, 5 - i);
-            points[5][i] = new Point(rand.nextInt(), rand.nextInt());
+            points[0][i] = new Point(i, 0);
+            points[1][i] = new Point(0, i);
+            points[2][i] = new Point(5 - i, 0);
+            points[3][i] = new Point(i, 5 - i);
+            points[4][i] = new Point(rand.nextInt(), rand.nextInt());
         }
         Object[][] TEST_DATA = {
+                {SORT, points[0]},
                 {SORT, points[1]},
                 {SORT, points[2]},
                 {SORT, points[3]},
