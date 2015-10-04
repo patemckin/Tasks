@@ -34,8 +34,8 @@ public class SortTest {
             return o2.compareTo(o1);
         }
     };
-    private static final Comparator<Point> POINT_COMPARATOR = new Comparator<Point>(){
-        public int compare(final Point p1,final Point p2){
+    private static final Comparator<Point> POINT_COMPARATOR = new Comparator<Point>() {
+        public int compare(final Point p1, final Point p2) {
             Integer temp = p1.getX();
             return temp.compareTo(p2.getX());
         }
@@ -57,7 +57,7 @@ public class SortTest {
     }
 
     @Test
-    public void test1() {
+    public void test() {
         Double[] result = sort.sort(input, DOUBLE_COMPARATOR1);
         Assert.assertTrue(testAscendingOrder(result));
         Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
