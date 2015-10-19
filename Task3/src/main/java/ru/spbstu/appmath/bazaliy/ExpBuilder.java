@@ -6,6 +6,7 @@ public class ExpBuilder {
 
     private String expression; // Строка с исходным выражением
     private int p = 0; // текущая позиция
+    private boolean valid;
     private ExpTree expTree;
     private static String[][] states = new String[][]{
             {"+", "-"},
@@ -13,12 +14,28 @@ public class ExpBuilder {
             null
     };
     public ExpBuilder(String expression) {
-
         this.expression = expression;
-        expTree = build(0);
+        valid = checkExpression();
+        if(valid)
+            expTree = build(0);
     }
     public final ExpTree getExp(){
         return expTree;
+    }
+
+    private boolean checkExpression(){
+        Character[] Symbols = new Character[] {
+                '+', '-', '*', '/',' ','\t','\n','x'};
+
+        for (int i = 0; i < expression.length(); ++i) {
+            boolean inSymbols = false;
+            for (Character s : Symbols)
+                if (s == expression.charAt(i))
+                    inSymbols = true;
+            if(!inSymbols)
+                return false;
+        }
+        return true;
     }
 
     private ExpTree build(int state) {
@@ -87,12 +104,9 @@ public class ExpBuilder {
             skip(" ");
             try {
                 //пробуем прочитать число
-                long x = Long.parseLong(s);
+                double x = Double.parseDouble(s);//Long.parseLong(s);
                 return new ExpTree.Num(x);
             } catch (Exception e) {}
-
-            if ((s == null) || s.isEmpty()) // если пустая строка
-                return new ExpTree.Str(null);
 
             // не строка, не число и не null — значит переменная
             return new ExpTree.Var(s);
