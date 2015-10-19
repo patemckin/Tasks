@@ -13,26 +13,33 @@ public class ExpBuilder {
             {"*", "/"},
             null
     };
+
     public ExpBuilder(String expression) {
         this.expression = expression;
         valid = checkExpression();
-        if(valid)
+        if (valid)
             expTree = build(0);
     }
-    public final ExpTree getExp(){
+
+    public final ExpTree getExp() {
+        if (!valid)
+            return null;
         return expTree;
     }
 
-    private boolean checkExpression(){
-        Character[] Symbols = new Character[] {
-                '+', '-', '*', '/',' ','\t','\n','x'};
+    private boolean checkExpression() {
+        Character[] Symbols = new Character[]{
+                '+', '-', '*', '/', ' ',
+                '\t', '\n', 'x',
+                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.'
+        };
 
         for (int i = 0; i < expression.length(); ++i) {
             boolean inSymbols = false;
             for (Character s : Symbols)
                 if (s == expression.charAt(i))
                     inSymbols = true;
-            if(!inSymbols)
+            if (!inSymbols)
                 return false;
         }
         return true;
@@ -104,11 +111,11 @@ public class ExpBuilder {
             skip(" ");
             try {
                 //пробуем прочитать число
-                double x = Double.parseDouble(s);//Long.parseLong(s);
+                double x = Double.parseDouble(s);
                 return new ExpTree.Num(x);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
-            // не строка, не число и не null — значит переменная
             return new ExpTree.Var(s);
 
         }

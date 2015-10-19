@@ -44,7 +44,7 @@ public abstract class ExpTree {
         @Override
         public Object execute(Double variable) throws Exception {
             Object o = expr.execute(variable);
-                return -(Long)o;
+            return -(Long) o;
         }
     }
 
@@ -63,18 +63,18 @@ public abstract class ExpTree {
         public Object execute(Double variable) throws Exception {
             Object o1 = x1.execute(variable);
             Object o2 = x2.execute(variable);
-            return execNum((Long)o1, (Long)o2);
+            return execNum((Double) o1, (Double) o2);
         }
 
-        private Object execNum(long n1, long n2) throws Exception {
-            if("+".equals(op))
-                return (Long)(n1 + n2);
-            if("-".equals(op))
-                return (Long)(n1 - n2);
-            if("*".equals(op))
-                return (Long)(n1 * n2);
-            if("/".equals(op))
-                return (Long)(n1 / n2);
+        private Object execNum(double n1, double n2) throws Exception {
+            if ("+".equals(op))
+                return (Double) (n1 + n2);
+            if ("-".equals(op))
+                return (Double) (n1 - n2);
+            if ("*".equals(op))
+                return (Double) (n1 * n2);
+            if ("/".equals(op))
+                return (Double) (n1 / n2);
 
             throw new Exception("Illegal Long operator: " + op);
         }
