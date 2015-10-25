@@ -8,11 +8,16 @@ public class main {
             try {
                 value = Double.parseDouble(args[1]);
             } catch (Exception e) {
+                System.err.print(e);
             }
         }
-        ExpBuilder exp = new ExpBuilder(expression);
-        ExpTree expTree = exp.getExp();
-        Double result = (Double) expTree.execute(value);
-        System.out.print(result);
+        try {
+            ExpBuilder exp = new ExpBuilder(expression);
+            ExpTree expTree = exp.getExp();
+            Double result = (Double) expTree.execute(value);
+            System.out.print(result);
+        } catch (Exception e) {
+            System.err.print(e.getMessage());
+        }
     }
 }

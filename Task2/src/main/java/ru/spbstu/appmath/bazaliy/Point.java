@@ -4,16 +4,16 @@
 package ru.spbstu.appmath.bazaliy;
 
 public class Point {
-    private static int x, y;
+    private int x, y;
 
-    public Point(int _x, int _y) {
-        x = _x;
-        y = _y;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Point() {
-        x = 0;
-        y = 0;
+        this.x = 0;
+        this.y = 0;
     }
 
     public boolean Equal(Point p) {

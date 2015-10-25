@@ -14,7 +14,7 @@ public class ExpBuilder {
             null
     };
 
-    public ExpBuilder(String expression) {
+    public ExpBuilder(String expression) throws Exception {
         this.expression = expression;
         valid = checkExpression();
         if (valid)
@@ -31,7 +31,7 @@ public class ExpBuilder {
         Character[] Symbols = new Character[]{
                 '+', '-', '*', '/', ' ',
                 '\t', '\n', 'x',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.'
+                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(',')'
         };
 
         for (int i = 0; i < expression.length(); ++i) {
@@ -45,7 +45,7 @@ public class ExpBuilder {
         return true;
     }
 
-    private ExpTree build(int state) {
+    private ExpTree build(int state) throws Exception {
         if ((state + 1) >= states.length) {
             ExpTree ex = null;
             boolean isMinus = startWith("-");
@@ -96,7 +96,7 @@ public class ExpBuilder {
         return null;
     }
 
-    private ExpTree readSingle() {
+    private ExpTree readSingle() throws Exception {
         int p0 = p;
 
         while (p < expression.length()) {
@@ -119,7 +119,7 @@ public class ExpBuilder {
             return new ExpTree.Var(s);
 
         }
-        return null;
+        throw new Exception("Wrong syntax");
     }
 }
 
