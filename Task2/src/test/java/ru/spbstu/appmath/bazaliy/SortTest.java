@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.Random;
 
 @RunWith(Parameterized.class)
-public class SortTest {
+public class SortTest<T> {
     private static final Comparator<Point> POINT_COMPARATOR_X = new Comparator<Point>() {
         public int compare(final Point p1, final Point p2) {
             return Integer.compare(p1.getX(),p2.getX());
@@ -63,11 +63,11 @@ public class SortTest {
         return Arrays.asList(TEST_DATA);
     }
 
-    private InsertionSort sort;
-    private Object[] input;
-    private Comparator comparator;
+    private InsertionSort<T> sort;
+    private T[] input;
+    private Comparator<T> comparator;
 
-    public SortTest(InsertionSort sort, Comparator comparator, Point[] input) {
+    public SortTest(InsertionSort<T> sort, Comparator <T> comparator, T[] input) {
         this.sort = sort;
         this.input = input;
         this.comparator = comparator;
@@ -75,10 +75,10 @@ public class SortTest {
 
     @Test
     public void test() {
-        Object[] result = sort.sort(input,comparator);
+        T[] result = sort.sort(input, comparator);
         Assert.assertTrue("Array wasn't sorted",testOrder(result, comparator));
         Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
-        Assert.assertTrue("Sorted array have different elements",hasEachElementOf(input, result));
+        Assert.assertTrue("Sorted array have different elements",hasEachElementOf(input, result,comparator));
 
     }
 
@@ -93,14 +93,17 @@ public class SortTest {
     }
 
 
-    private static <T> boolean hasEachElementOf(T[] input, T[] result) {
+    private static <T> boolean hasEachElementOf(T[] input, T[] result, Comparator<T> comparator) {
         for (T element : input) {
+            int c = 0;
             for (int j = 0; j < result.length; j++) {
-                if (result[j] == element)
-                    break;
-                if (j == result.length - 1)
-                    return false;
+                if (element.equals(result[j]))
+                    c++;
+                if (element.equals(input[j]))
+                    c--;
             }
+            if (c != 0)
+                return false;
         }
         return true;
     }
