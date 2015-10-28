@@ -15,7 +15,7 @@ public class InsertionSort<T> implements Sort<T> {
         return result;
     }
 
-    public T[] sort(final T[] arr, Comparator<T> comparator) {
+    public T[] sort(T[] arr, Comparator<T> comparator) {
         T[] result = arr;
         for (int j = 1; j < result.length; ++j) {
             T key = result[j];
