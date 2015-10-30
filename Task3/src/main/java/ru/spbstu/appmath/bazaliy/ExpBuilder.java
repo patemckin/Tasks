@@ -60,9 +60,7 @@ public class ExpBuilder {
                 ex = new ExpTree.Unary(ex, "-");
             return ex;
         }
-        //строим первый операнд
         ExpTree a1 = build(state + 1);
-        // строим последущие операнды
         String op = null;
         while ((op = readStateOperator(state)) != null) {
             ExpTree a2 = build(state + 1);
@@ -102,17 +100,12 @@ public class ExpBuilder {
                 break;
             p++;
         }
-        //System.out.print((int)(p-p0) + "\n");
         ExpTree ex = null;
         if (p > p0) {
             String s = expression.substring(p0, p);
-            //System.out.print(s +"\n");
-
             skip(" ");
             try {
-                //пробуем прочитать число
                 double x = Double.parseDouble(s);
-                //System.out.print(x +"\n");
                 return new ExpTree.Num(x);
             } catch (Exception e) {
             }

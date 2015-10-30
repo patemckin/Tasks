@@ -14,16 +14,21 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class CalcTest {
     private static final Object[][] TEST_DATA = {
-            {"1+2+3",0.0,6.0},
-            {"1/x + 1 ",2.0, 1.5},
-            {"-1 + 2 - x",1.0,0.0},
-            {"x*x - x +1.23 ",2.0, 3.23},
-            {"150*x - 2/x +3.14",2.0,302.14 }
+            {"1+2+3",0.0,6.0,""},
+            {"1/x + 1 ",2.0, 1.5,""},
+            {"-1 + 2 - x",1.0,0.0,""},
+            {"x*x - x +1.23 ",2.0, 3.23,""},
+            {"150*x - 2/x +3.14",2.0,302.14,""},
+            {"Привет",2.0,302.14,"Wrong symbols in expression"},
+            {"1 +1/0",0.0,0.0,"Division by zero"},
+            {" 1+ (",0.0,0.0,"Wrong syntax"}
+
     };
 
     private String expression;
     private Double variable;
     private Double result;
+    private String exception;
     private static final Double epsilon = Math.pow(10, -15);
 
    // @Rule
@@ -34,11 +39,13 @@ public class CalcTest {
         return Arrays.asList(TEST_DATA);
     }
 
-    public CalcTest(String expression, Double variable, Double result) {
+    public CalcTest(String expression, Double variable, Double result, String exceptionMessage) {
         this.expression = expression;
         this.variable = variable;
         this.result = result;
+        this.exception = exceptionMessage;
     }
+
     @Test
     public void test() {
         try {
@@ -47,8 +54,8 @@ public class CalcTest {
             Double countedValue = expTree.execute(variable);
             Assert.check(Math.abs(countedValue - result) < epsilon, "Wrong answer");
         } catch (Exception e) {
-            System.err.print(e.getMessage());
-
+            System.out.print(e.getMessage());
+            Assert.check(e.getMessage().equals(exception));
         }
     }
 

@@ -73,9 +73,11 @@ public abstract class ExpTree {
                 return (Double)(n1 - n2);
             if ("*".equals(op))
                 return (Double)(n1 * n2);
-            if ("/".equals(op))
-                return (Double)(n1 / n2);
-
+            if ("/".equals(op)) {
+                if (n2 == 0)
+                    throw new Exception("Division by zero");
+                return (Double) (n1 / n2);
+            }
             throw new Exception("Illegal Double operator: " + op);
         }
     }
