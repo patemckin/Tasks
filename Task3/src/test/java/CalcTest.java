@@ -22,7 +22,6 @@ public class CalcTest {
             {"Привет",2.0,302.14,"Wrong symbols in expression"},
             {"1 +1/0",0.0,0.0,"Division by zero"},
             {" 1+ (",0.0,0.0,"Wrong syntax"}
-
     };
 
     private String expression;
@@ -55,7 +54,7 @@ public class CalcTest {
             Assert.check(Math.abs(countedValue - result) < epsilon, "Wrong answer");
         } catch (Exception e) {
             System.out.print(e.getMessage());
-            Assert.check(e.getMessage().equals(exception));
+            Assert.check(e.getMessage().equals(exception),"Different exception");
         }
     }
 
