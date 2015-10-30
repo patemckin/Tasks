@@ -6,7 +6,6 @@ public class ExpBuilder {
 
     private String expression; // Строка с исходным выражением
     private int p = 0; // текущая позиция
-    private boolean valid;
     private ExpTree expTree;
     private static String[][] states = new String[][]{
             {"+", "-"},
@@ -14,35 +13,34 @@ public class ExpBuilder {
             null
     };
 
-    public ExpBuilder(String expression) throws Exception {
+    public ExpBuilder(String expression, boolean hasVariable) throws Exception {
         this.expression = expression;
-        valid = checkExpression();
-        if (valid)
-            expTree = build(0);
+        checkExpression(hasVariable);
+        this.expTree = build(0);
     }
 
     public final ExpTree getExp() {
-        if (!valid)
-            return null;
         return expTree;
     }
 
-    private boolean checkExpression() {
+    private void checkExpression(boolean hasVariable) throws Exception {
         Character[] Symbols = new Character[]{
                 '+', '-', '*', '/', ' ',
                 '\t', '\n', 'x',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(',')'
+                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(',')',','
         };
 
         for (int i = 0; i < expression.length(); ++i) {
             boolean inSymbols = false;
             for (Character s : Symbols)
-                if (s == expression.charAt(i))
+                if (s == expression.charAt(i)) {
                     inSymbols = true;
+                    if(s == 'x' && !hasVariable)
+                        throw new Exception("Wrong expression: variable hasn't been initialized");
+                }
             if (!inSymbols)
-                return false;
+                throw new Exception("Wrong symbols in expression");
         }
-        return true;
     }
 
     private ExpTree build(int state) throws Exception {
@@ -100,18 +98,21 @@ public class ExpBuilder {
         int p0 = p;
 
         while (p < expression.length()) {
-            if (!(Character.isLetterOrDigit(expression.charAt(p))))
+            if (!Character.isLetterOrDigit(expression.charAt(p)) && (expression.charAt(p) != '.'))
                 break;
             p++;
         }
-
+        //System.out.print((int)(p-p0) + "\n");
         ExpTree ex = null;
         if (p > p0) {
             String s = expression.substring(p0, p);
+            //System.out.print(s +"\n");
+
             skip(" ");
             try {
                 //пробуем прочитать число
                 double x = Double.parseDouble(s);
+                //System.out.print(x +"\n");
                 return new ExpTree.Num(x);
             } catch (Exception e) {
             }
