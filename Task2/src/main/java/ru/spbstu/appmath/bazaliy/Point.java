@@ -1,6 +1,3 @@
-/**
- * Created by admin on 03/10/15.
- */
 package ru.spbstu.appmath.bazaliy;
 
 public class Point {
@@ -16,7 +13,7 @@ public class Point {
         this.y = 0;
     }
 
-    public boolean Equal(Point p) {
+    public boolean equals(Point p) {
         return (p.getX() == x) && (p.getY() == y);
     }
 

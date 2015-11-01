@@ -14,7 +14,7 @@ import java.util.Random;
 public class SortTest<T> {
     private static final Comparator<Point> POINT_COMPARATOR_X = new Comparator<Point>() {
         public int compare(final Point p1, final Point p2) {
-            return Integer.compare(p1.getX(),p2.getX());
+            return Integer.compare(p1.getX(), p2.getX());
         }
     };
     private static final Comparator<Point> POINT_COMPARATOR_Y = new Comparator<Point>() {
@@ -34,28 +34,36 @@ public class SortTest<T> {
         }
     };
 
-    private static Point[] randomPointsArray(){
+    private static Point[] randomPointsArray() {
         Random rand = new Random();
-        Point[] Points = new Point[Math.abs(rand.nextInt())%20];
-        for (int i = 0; i < Points.length;i++){
-            Points[i] = new Point(rand.nextInt(),rand.nextInt());
+        Point[] points = new Point[Math.abs(rand.nextInt()) % 20];
+        for (int i = 0; i < points.length; i++) {
+            points[i] = new Point(rand.nextInt(), rand.nextInt());
         }
-        return Points;
+        return points;
     }
-    private static Double[] randomDoubleArray(){
+
+    private static Double[] randomDoubleArray() {
         Random rand = new Random();
-        Double[] Nums = new Double[Math.abs(rand.nextInt())%20];
-        for (int i = 0; i < Nums.length;i++){
-            Nums[i] = rand.nextDouble();
+        Double[] nums = new Double[Math.abs(rand.nextInt()) % 20];
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = rand.nextDouble();
         }
-        return Nums;
+        return nums;
     }
 
     private static final Object[][] TEST_DATA = {
             {new InsertionSort<Point>(), POINT_COMPARATOR_X, randomPointsArray()},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{}},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{new Point(1,2),new Point(3,4), new Point(5,6)}},
             {new InsertionSort<Point>(), POINT_COMPARATOR_Y, randomPointsArray()},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, new Double[]{1.234,3.234,1.353,4.2421,2.123,5.12}},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, randomDoubleArray()}
+            {new InsertionSort<Point>(), POINT_COMPARATOR_Y, new Point[]{new Point(1,2),new Point(0,1), new Point()}},
+
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, new Double[]{1.234, 3.234, 1.353, 4.2421, 2.123, 5.12}},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, randomDoubleArray()},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, randomDoubleArray()},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{}},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{3.21,2.12, 2.01,1.434, 0.12424}}
     };
 
     @Parameterized.Parameters
@@ -67,7 +75,7 @@ public class SortTest<T> {
     private T[] input;
     private Comparator<T> comparator;
 
-    public SortTest(InsertionSort<T> sort, Comparator <T> comparator, T[] input) {
+    public SortTest(InsertionSort<T> sort, Comparator<T> comparator, T[] input) {
         this.sort = sort;
         this.input = input;
         this.comparator = comparator;
@@ -76,24 +84,23 @@ public class SortTest<T> {
     @Test
     public void test() {
         T[] result = sort.sort(input, comparator);
-        Assert.assertTrue("Array wasn't sorted",testOrder(result, comparator));
+        Assert.assertTrue("Array wasn't sorted", testOrder(result, comparator));
         Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
-        Assert.assertTrue("Sorted array have different elements",hasEachElementOf(input, result,comparator));
+        Assert.assertTrue("Sorted array have different elements", hasEachElementOf(input, result));
 
     }
 
 
-    private static <T> boolean testOrder(T[] array, Comparator<T> c)
-    {
+    private static <T> boolean testOrder(T[] array, Comparator<T> c) {
         for (int i = 0; i < array.length - 1; i++) {
-            if (c.compare(array[i],array[i+1]) >= 0)
+            if (c.compare(array[i], array[i + 1]) >= 0)
                 return false;
         }
         return true;
     }
 
 
-    private static <T> boolean hasEachElementOf(T[] input, T[] result, Comparator<T> comparator) {
+    private static <T> boolean hasEachElementOf(T[] input, T[] result) {
         for (T element : input) {
             int c = 0;
             for (int j = 0; j < result.length; j++) {
