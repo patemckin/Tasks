@@ -33,6 +33,28 @@ public class SortTest<T> {
             return o2.compareTo(o1);
         }
     };
+    private static final Object[][] TEST_DATA = {
+            {new InsertionSort<Point>(), POINT_COMPARATOR_X, randomPointsArray()},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{}},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{new Point(1,2),new Point(3,4), new Point(5,6)}},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_Y, randomPointsArray()},
+            {new InsertionSort<Point>(), POINT_COMPARATOR_Y, new Point[]{new Point(1,2),new Point(0,1), new Point()}},
+
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, new Double[]{1.234, 3.234, 1.353, 4.2421, 2.123, 5.12}},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, randomDoubleArray()},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, randomDoubleArray()},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{}},
+            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{3.21,2.12, 2.01,1.434, 0.12424}}
+    };
+    private InsertionSort<T> sort;
+    private T[] input;
+    private Comparator<T> comparator;
+
+    public SortTest(InsertionSort<T> sort, Comparator<T> comparator, T[] input) {
+        this.sort = sort;
+        this.input = input;
+        this.comparator = comparator;
+    }
 
     private static Point[] randomPointsArray() {
         Random rand = new Random();
@@ -52,44 +74,10 @@ public class SortTest<T> {
         return nums;
     }
 
-    private static final Object[][] TEST_DATA = {
-            {new InsertionSort<Point>(), POINT_COMPARATOR_X, randomPointsArray()},
-            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{}},
-            {new InsertionSort<Point>(), POINT_COMPARATOR_X, new Point []{new Point(1,2),new Point(3,4), new Point(5,6)}},
-            {new InsertionSort<Point>(), POINT_COMPARATOR_Y, randomPointsArray()},
-            {new InsertionSort<Point>(), POINT_COMPARATOR_Y, new Point[]{new Point(1,2),new Point(0,1), new Point()}},
-
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, new Double[]{1.234, 3.234, 1.353, 4.2421, 2.123, 5.12}},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR1, randomDoubleArray()},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, randomDoubleArray()},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{}},
-            {new InsertionSort<Double>(), DOUBLE_COMPARATOR2, new Double[]{3.21,2.12, 2.01,1.434, 0.12424}}
-    };
-
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
         return Arrays.asList(TEST_DATA);
     }
-
-    private InsertionSort<T> sort;
-    private T[] input;
-    private Comparator<T> comparator;
-
-    public SortTest(InsertionSort<T> sort, Comparator<T> comparator, T[] input) {
-        this.sort = sort;
-        this.input = input;
-        this.comparator = comparator;
-    }
-
-    @Test
-    public void test() {
-        T[] result = sort.sort(input, comparator);
-        Assert.assertTrue("Array wasn't sorted", testOrder(result, comparator));
-        Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
-        Assert.assertTrue("Sorted array have different elements", hasEachElementOf(input, result));
-
-    }
-
 
     private static <T> boolean testOrder(T[] array, Comparator<T> c) {
         for (int i = 0; i < array.length - 1; i++) {
@@ -98,7 +86,6 @@ public class SortTest<T> {
         }
         return true;
     }
-
 
     private static <T> boolean hasEachElementOf(T[] input, T[] result) {
         for (T element : input) {
@@ -113,5 +100,13 @@ public class SortTest<T> {
                 return false;
         }
         return true;
+    }
+
+    @Test
+    public void test() {
+        T[] result = sort.sort(input, comparator);
+        Assert.assertTrue("Array wasn't sorted", testOrder(result, comparator));
+        Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
+        Assert.assertTrue("Sorted array have different elements", hasEachElementOf(input, result));
     }
 }
