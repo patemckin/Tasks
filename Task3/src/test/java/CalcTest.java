@@ -1,4 +1,4 @@
-import com.sun.tools.javac.util.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -23,20 +23,14 @@ public class CalcTest {
             {"1 +1/0",0.0,0.0,"Division by zero"},
             {" 1+ (",0.0,0.0,"Wrong syntax"}
     };
-
+    private static final Double epsilon = Math.pow(10, -15);
     private String expression;
     private Double variable;
     private Double result;
     private String exception;
-    private static final Double epsilon = Math.pow(10, -15);
 
    // @Rule
    // public ExpectedException thrown= ExpectedException.none();
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> testData() {
-        return Arrays.asList(TEST_DATA);
-    }
 
     public CalcTest(String expression, Double variable, Double result, String exceptionMessage) {
         this.expression = expression;
@@ -45,16 +39,22 @@ public class CalcTest {
         this.exception = exceptionMessage;
     }
 
+    @Parameterized.Parameters
+    public static Collection<Object[]> testData() {
+        return Arrays.asList(TEST_DATA);
+    }
+
     @Test
     public void test() {
         try {
             ExpBuilder exp = new ExpBuilder(expression, true);
             ExpTree expTree = exp.getExp();
             Double countedValue = expTree.execute(variable);
-            Assert.check(Math.abs(countedValue - result) < epsilon, "Wrong answer");
+            Assert.assertTrue("Wrong answer", Math.abs(countedValue - result) < epsilon);
+            //Assert.check(Math.abs(countedValue - result) < epsilon, "Wrong answer");
         } catch (Exception e) {
             System.out.print(e.getMessage());
-            Assert.check(e.getMessage().equals(exception),"Different exception");
+            Assert.assertSame("Different exception", e.getMessage(), exception);
         }
     }
 

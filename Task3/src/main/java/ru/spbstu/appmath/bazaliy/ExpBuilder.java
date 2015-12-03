@@ -4,19 +4,23 @@ package ru.spbstu.appmath.bazaliy;
 
 public class ExpBuilder {
 
-    private String expression; // Строка с исходным выражением
-    private int p = 0; // текущая позиция
-    private ExpTree expTree;
     private static String[][] states = new String[][]{
             {"+", "-"},
             {"*", "/"},
             null
     };
+    private String expression; // Строка с исходным выражением
+    private int p = 0; // текущая позиция
+    private ExpTree expTree;
 
     public ExpBuilder(String expression, boolean hasVariable) throws Exception {
         this.expression = expression;
         checkExpression(hasVariable);
-        this.expTree = build(0);
+    }
+
+    public ExpTree build() throws Exception {
+        this.expTree = makeTree(0);
+        return getExp();
     }
 
     public final ExpTree getExp() {
@@ -43,7 +47,7 @@ public class ExpBuilder {
         }
     }
 
-    private ExpTree build(int state) throws Exception {
+    private ExpTree makeTree(int state) throws Exception {
         if ((state + 1) >= states.length) {
             ExpTree ex = null;
             boolean isMinus = startWith("-");
@@ -52,7 +56,7 @@ public class ExpBuilder {
 
             if (startWith("(")) {
                 skip("(");
-                ex = build(0);
+                ex = makeTree(0);
                 skip(")");
             } else
                 ex = readSingle();
@@ -60,10 +64,10 @@ public class ExpBuilder {
                 ex = new ExpTree.Unary(ex, "-");
             return ex;
         }
-        ExpTree a1 = build(state + 1);
+        ExpTree a1 = makeTree(state + 1);
         String op = null;
         while ((op = readStateOperator(state)) != null) {
-            ExpTree a2 = build(state + 1);
+            ExpTree a2 = makeTree(state + 1);
             a1 = new ExpTree.Binary(a1, a2, op);
         }
         return a1;

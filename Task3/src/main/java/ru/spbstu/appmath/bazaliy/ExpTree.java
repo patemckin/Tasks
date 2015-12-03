@@ -3,52 +3,49 @@ package ru.spbstu.appmath.bazaliy;
 /**
  * Вычислимое Выражение
  */
-public abstract class ExpTree {
+public interface ExpTree {
 
-    public abstract Double execute(Double variable) throws Exception;
+    double execute(double variable) throws Exception;
 
 
-    static class Num extends ExpTree {
+    class Num implements ExpTree {
         private final double value;
 
         public Num(double x) {
             value = x;
         }
 
-        @Override
-        public Double execute(Double variable) {
+        public double execute(double variable) {
             return value;
         }
     }
 
-    static class Var extends ExpTree {
+    class Var implements ExpTree {
         private final String name;
 
         public Var(String name) {
             this.name = name;
         }
 
-        @Override
-        public Double execute(Double variable) {
+        public double execute(double variable) {
             return variable;
         }
     }
 
-    static class Unary extends ExpTree {
+    class Unary implements ExpTree {
         private final ExpTree expr;
 
         public Unary(ExpTree e, String oper) {
             expr = e;
         }
 
-        @Override
-        public Double execute(Double variable) throws Exception {
-            Double o = expr.execute(variable);
-            return -(Double)o;
+        public double execute(double variable) throws Exception {
+            double o = expr.execute(variable);
+            return -(double) o;
         }
     }
 
-    static class Binary extends ExpTree {
+    class Binary implements ExpTree {
         private final ExpTree x1;
         private final ExpTree x2;
         private final String op;
@@ -59,26 +56,25 @@ public abstract class ExpTree {
             this.op = op;
         }
 
-        @Override
-        public Double execute(Double variable) throws Exception {
-            Double o1 = x1.execute(variable);
-            Double o2 = x2.execute(variable);
+        public double execute(double variable) throws Exception {
+            double o1 = x1.execute(variable);
+            double o2 = x2.execute(variable);
             return execNum(o1,o2);
         }
 
-        private Double execNum(double n1, double n2) throws Exception {
+        private double execNum(double n1, double n2) throws Exception {
             if ("+".equals(op))
-                return (Double)(n1 + n2);
+                return (double) (n1 + n2);
             if ("-".equals(op))
-                return (Double)(n1 - n2);
+                return (double) (n1 - n2);
             if ("*".equals(op))
-                return (Double)(n1 * n2);
+                return (double) (n1 * n2);
             if ("/".equals(op)) {
                 if (n2 == 0)
                     throw new Exception("Division by zero");
-                return (Double) (n1 / n2);
+                return (double) (n1 / n2);
             }
-            throw new Exception("Illegal Double operator: " + op);
+            throw new Exception("Illegal double operator: " + op);
         }
     }
 }
