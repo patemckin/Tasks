@@ -1,8 +1,8 @@
 package ru.spbstu.appmath.bazaliy;
 
-/**
- * Вычислимое Выражение
- */
+import ru.spbstu.appmath.bazaliy.MyExceptions.*;
+
+
 public interface ExpTree {
 
     double execute(double variable) throws Exception;
@@ -35,13 +35,13 @@ public interface ExpTree {
     class Unary implements ExpTree {
         private final ExpTree expr;
 
-        public Unary(ExpTree e, String oper) {
+        public Unary(ExpTree e) {
             expr = e;
         }
 
         public double execute(double variable) throws Exception {
             double o = expr.execute(variable);
-            return -(double) o;
+            return -o;
         }
     }
 
@@ -64,17 +64,17 @@ public interface ExpTree {
 
         private double execNum(double n1, double n2) throws Exception {
             if ("+".equals(op))
-                return (double) (n1 + n2);
+                return (n1 + n2);
             if ("-".equals(op))
-                return (double) (n1 - n2);
+                return (n1 - n2);
             if ("*".equals(op))
-                return (double) (n1 * n2);
+                return (n1 * n2);
             if ("/".equals(op)) {
                 if (n2 == 0)
-                    throw new Exception("Division by zero");
-                return (double) (n1 / n2);
+                    throw new CalcException("Division by zero");
+                return (n1 / n2);
             }
-            throw new Exception("Illegal double operator: " + op);
+            throw new CalcException("Illegal double operator: " + op);
         }
     }
 }

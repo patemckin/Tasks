@@ -2,6 +2,9 @@
 package ru.spbstu.appmath.bazaliy;
 
 
+import ru.spbstu.appmath.bazaliy.MyExceptions.SyntaxException;
+import ru.spbstu.appmath.bazaliy.MyExceptions.VariableException;
+
 public class ExpBuilder {
 
     private static String[][] states = new String[][]{
@@ -9,9 +12,9 @@ public class ExpBuilder {
             {"*", "/"},
             null
     };
-    private String expression; // Строка с исходным выражением
-    private int p = 0; // текущая позиция
-    private ExpTree expTree;
+    private String expression; // input expression
+    private int pos = 0; // current pos
+    private ExpTree expTree; // expression tree
 
     public ExpBuilder(String expression, boolean hasVariable) throws Exception {
         this.expression = expression;
@@ -29,8 +32,8 @@ public class ExpBuilder {
 
     private void checkExpression(boolean hasVariable) throws Exception {
         Character[] Symbols = new Character[]{
-                '+', '-', '*', '/', ' ',
-                '\t', '\n', 'x',
+                '+', '-', '*', '/',
+                ' ', '\t', '\n', 'x',
                 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(',')',','
         };
 
@@ -40,16 +43,16 @@ public class ExpBuilder {
                 if (s == expression.charAt(i)) {
                     inSymbols = true;
                     if(s == 'x' && !hasVariable)
-                        throw new Exception("Wrong expression: variable hasn't been initialized");
+                        throw new VariableException("Variable hasn't been initialized");
                 }
             if (!inSymbols)
-                throw new Exception("Wrong symbols in expression");
+                throw new SyntaxException("Wrong symbols in expression");
         }
     }
 
     private ExpTree makeTree(int state) throws Exception {
         if ((state + 1) >= states.length) {
-            ExpTree ex = null;
+            ExpTree ex;
             boolean isMinus = startWith("-");
             if (isMinus)
                 skip("-");
@@ -64,8 +67,9 @@ public class ExpBuilder {
                 ex = new ExpTree.Unary(ex, "-");
             return ex;
         }
+
         ExpTree a1 = makeTree(state + 1);
-        String op = null;
+        String op;
         while ((op = readStateOperator(state)) != null) {
             ExpTree a2 = makeTree(state + 1);
             a1 = new ExpTree.Binary(a1, a2, op);
@@ -74,14 +78,14 @@ public class ExpBuilder {
     }
 
     private boolean startWith(String s) {
-        return expression.startsWith(s, p);
+        return expression.startsWith(s, pos);
     }
 
     private void skip(String s) {
         if (startWith(s))
-            p += s.length();
-        while (p < expression.length() && expression.charAt(p) == ' ')
-            p++;
+            pos += s.length();
+        while (pos < expression.length() && expression.charAt(pos) == ' ')
+            pos++;
     }
 
 
@@ -97,16 +101,15 @@ public class ExpBuilder {
     }
 
     private ExpTree readSingle() throws Exception {
-        int p0 = p;
+        int p0 = pos;
 
-        while (p < expression.length()) {
-            if (!Character.isLetterOrDigit(expression.charAt(p)) && (expression.charAt(p) != '.'))
+        while (pos < expression.length()) {
+            if (!Character.isLetterOrDigit(expression.charAt(pos)) && (expression.charAt(pos) != '.'))
                 break;
-            p++;
+            pos++;
         }
-        ExpTree ex = null;
-        if (p > p0) {
-            String s = expression.substring(p0, p);
+        if (pos > p0) {
+            String s = expression.substring(p0, pos);
             skip(" ");
             try {
                 double x = Double.parseDouble(s);
@@ -117,7 +120,7 @@ public class ExpBuilder {
             return new ExpTree.Var(s);
 
         }
-        throw new Exception("Wrong syntax");
+        throw new SyntaxException();
     }
 }
 

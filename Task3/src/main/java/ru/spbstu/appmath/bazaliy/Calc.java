@@ -1,5 +1,7 @@
 package ru.spbstu.appmath.bazaliy;
 
+import ru.spbstu.appmath.bazaliy.MyExceptions.*;
+
 public class Calc {
     public static void main(String[] args){
         try {
@@ -8,7 +10,7 @@ public class Calc {
             boolean isVariableInited = false;
 
             if (args.length > 2 || args.length == 0)
-                throw new Exception("Too much arguments");
+                throw new VariableException("Too much arguments");
             if (args.length == 2) {
                 value = Double.parseDouble(args[1]);
                 isVariableInited = true;
