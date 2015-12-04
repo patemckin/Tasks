@@ -1,10 +1,17 @@
 package ru.spbstu.appmath.bazaliy;
 
-import ru.spbstu.appmath.bazaliy.MyExceptions.*;
-
 public class Calc {
     public static void main(String[] args){
         try {
+            FileCalc calculator = new FileCalc("input.txt", "output.txt", 1, 10);
+            calculator.Execute();
+        } catch(Exception e)
+        {
+            System.out.print(e.getMessage());
+        }
+
+    }
+/*        try {
             String expression = args[0];
             Double value = 0.0;
             boolean isVariableInited = false;
@@ -14,8 +21,7 @@ public class Calc {
                 value = Double.parseDouble(args[1]);
                 isVariableInited = true;
             }
-            ExpBuilder exp = new ExpBuilder(expression);
-            ExpTree expTree = exp.build();
+            ExpTree expTree = new ExpBuilder(expression).build();
             double result;
             if (isVariableInited)
                  result = expTree.execute(value);
@@ -25,5 +31,5 @@ public class Calc {
         } catch (Exception e) {
             System.err.print(e.getMessage());
         }
-    }
+    }*/
 }
