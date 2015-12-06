@@ -22,10 +22,6 @@ public class ExpBuilder {
 
     public ExpTree build() throws Exception {
         this.expTree = makeTree(0);
-        return getExp();
-    }
-
-    public final ExpTree getExp() {
         return expTree;
     }
 
@@ -33,7 +29,7 @@ public class ExpBuilder {
         Character[] Symbols = new Character[]{
                 '+', '-', '*', '/',
                 ' ', '\t', '\n', 'x',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(',')',','
+                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '(', ')', ','
         };
 
         for (int i = 0; i < expression.length(); ++i) {
@@ -46,6 +42,9 @@ public class ExpBuilder {
                 throw new SyntaxException("Wrong symbols in expression");
         }
     }
+
+    /*
+    * Main function, which builds a tree. Parameter state told us which level of different states we are processing right now. */
 
     private ExpTree makeTree(int state) throws Exception {
         if ((state + 1) >= states.length) {
@@ -111,9 +110,9 @@ public class ExpBuilder {
             try {
                 double x = Double.parseDouble(s);
                 return new ExpTree.Num(x);
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
+                //parseDouble could throw exception
             }
-
             return new ExpTree.Var(s);
 
         }

@@ -6,6 +6,7 @@ import ru.spbstu.appmath.bazaliy.MyExceptions.*;
 public interface ExpTree {
 
     double execute(double variable) throws CalcException;
+
     double execute() throws CalcException;
 
     class Num implements ExpTree {
@@ -14,9 +15,11 @@ public interface ExpTree {
         public Num(double x) {
             value = x;
         }
+
         public double execute(double variable) {
             return value;
         }
+
         public double execute() {
             return value;
         }
@@ -33,8 +36,9 @@ public interface ExpTree {
         public double execute(double variable) {
             return variable;
         }
-        public double execute() throws CalcException{
-            throw new CalcException("Variable hasn't been initialized");
+
+        public double execute() throws CalcException {
+            throw new VariableException();
         }
     }
 
@@ -49,12 +53,12 @@ public interface ExpTree {
             double o = expr.execute(variable);
             return -o;
         }
+
         public double execute() throws CalcException {
             double o = expr.execute();
             return -o;
         }
     }
-
 
 
     class Binary implements ExpTree {
@@ -71,12 +75,13 @@ public interface ExpTree {
         public double execute(double variable) throws CalcException {
             double o1 = x1.execute(variable);
             double o2 = x2.execute(variable);
-            return execNum(o1,o2);
+            return execNum(o1, o2);
         }
+
         public double execute() throws CalcException {
             double o1 = x1.execute();
             double o2 = x2.execute();
-            return execNum(o1,o2);
+            return execNum(o1, o2);
         }
 
         private double execNum(double n1, double n2) throws CalcException {
