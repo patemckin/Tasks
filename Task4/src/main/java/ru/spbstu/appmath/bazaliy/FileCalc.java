@@ -9,7 +9,6 @@ import java.util.Vector;
 
 public class FileCalc {
 
-
     public FileCalc(String inputFile, String outputFile, String limits) throws IOException {
         String[] arrLimits = limits.split(":");
         double min, max, step = 1;
