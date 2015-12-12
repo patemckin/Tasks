@@ -6,44 +6,55 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Vector;
 
-
-public class FileCalc {
-
-    public FileCalc(String inputFile, String outputFile, String limits) throws IOException {
-        String[] arrLimits = limits.split(":");
-        double min, max, step = 1;
+class Limits {
+    Limits(String input) throws IOException {
+        String[] arrLimits = input.split(":");
         if (arrLimits.length == 3) {
             try {
-                min = Double.parseDouble(arrLimits[0]);
-                max = Double.parseDouble(arrLimits[1]);
-                step = Double.parseDouble(arrLimits[2]);
+                this.min = Double.parseDouble(arrLimits[0]);
+                this.max = Double.parseDouble(arrLimits[1]);
+                this.step = Double.parseDouble(arrLimits[2]);
             } catch (NumberFormatException e) {
                 throw new IOException("Wrong format");
             }
         } else if (arrLimits.length == 2) {
             try {
-                min = Double.parseDouble(arrLimits[0]);
-                max = Double.parseDouble(arrLimits[1]);
+                this.min = Double.parseDouble(arrLimits[0]);
+                this.max = Double.parseDouble(arrLimits[1]);
+                this.step = 1;
             } catch (NumberFormatException e) {
                 throw new IOException("Wrong format");
             }
         } else
             throw new IOException("Wrong format");
-        //Не могу здесь сделать так: this(inputFile,outputFile,min,max, step);
-        this.min = min;
-        this.max = max;
-        this.step = step;
-        this.inFile = new File(inputFile);
-        this.outFile = new File(outputFile);
-        if (!outFile.exists()) {
-            outFile.createNewFile();
-        }
+    }
+    public double getMin() {
+        return min;
     }
 
+    public double getMax() {
+        return max;
+    }
+
+    public double getStep() {
+        return step;
+    }
+
+    private final double min;
+    private final double max;
+    private final double step;
+
+
+}
+
+public class FileCalc {
+
+    public FileCalc(String inputFile,String outputFile, Limits limits) throws IOException{
+        this(inputFile,outputFile,limits.getMin(),limits.getMax(),limits.getStep());
+    }
     public FileCalc(String inputFile, String outputFile, double min, double max) throws IOException {
         this(inputFile, outputFile, min, max, 1);
     }
-
     public FileCalc(String inputFile, String outputFile, double min, double max, double step) throws IOException {
         if (min > max)
             throw new IOException("Wrong limits");

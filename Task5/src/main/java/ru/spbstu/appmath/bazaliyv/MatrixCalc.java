@@ -79,6 +79,7 @@ public class MatrixCalc {
         {
             System.out.println(e.getMessage());
         }
+        service.shutdown();
 
         for (int[] i:MatrixR) {
             for (int j : i)
