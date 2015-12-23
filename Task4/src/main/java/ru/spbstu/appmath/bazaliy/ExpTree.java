@@ -1,13 +1,13 @@
 package ru.spbstu.appmath.bazaliy;
 
-import ru.spbstu.appmath.bazaliy.MyExceptions.*;
+import ru.spbstu.appmath.bazaliy.exceptions.calcexceptions.CalculationException;
 
 
 public interface ExpTree {
 
-    double execute(double variable) throws CalcException;
+    double execute(final double variable) throws CalculationException;
 
-    double execute() throws CalcException;
+    double execute() throws CalculationException;
 
     class Num implements ExpTree {
         private final double value;
@@ -16,7 +16,7 @@ public interface ExpTree {
             value = x;
         }
 
-        public double execute(double variable) {
+        public double execute(final double variable) {
             return value;
         }
 
@@ -33,12 +33,12 @@ public interface ExpTree {
             this.name = name;
         }
 
-        public double execute(double variable) {
+        public double execute(final double variable) {
             return variable;
         }
 
-        public double execute() throws CalcException {
-            throw new VariableException();
+        public double execute() throws CalculationException {
+            throw new CalculationException("Expression doesn't contain value of the variable");
         }
     }
 
@@ -49,12 +49,12 @@ public interface ExpTree {
             expr = e;
         }
 
-        public double execute(double variable) throws CalcException {
+        public double execute(final double variable) throws CalculationException {
             double o = expr.execute(variable);
             return -o;
         }
 
-        public double execute() throws CalcException {
+        public double execute() throws CalculationException {
             double o = expr.execute();
             return -o;
         }
@@ -72,19 +72,19 @@ public interface ExpTree {
             this.op = op;
         }
 
-        public double execute(double variable) throws CalcException {
+        public double execute(final double variable) throws CalculationException {
             double o1 = x1.execute(variable);
             double o2 = x2.execute(variable);
             return execNum(o1, o2);
         }
 
-        public double execute() throws CalcException {
+        public double execute() throws CalculationException {
             double o1 = x1.execute();
             double o2 = x2.execute();
             return execNum(o1, o2);
         }
 
-        private double execNum(double n1, double n2) throws CalcException {
+        private double execNum(final double n1, final double n2) throws CalculationException {
             if ("+".equals(op))
                 return (n1 + n2);
             if ("-".equals(op))
@@ -93,10 +93,10 @@ public interface ExpTree {
                 return (n1 * n2);
             if ("/".equals(op)) {
                 if (n2 == 0)
-                    throw new CalcException("Division by zero");
+                    throw new CalculationException("Division by zero");
                 return (n1 / n2);
             }
-            throw new CalcException("Illegal double operator: " + op);
+            throw new CalculationException("Illegal double operator: " + op);
         }
     }
 }

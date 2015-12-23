@@ -1,63 +1,29 @@
 package ru.spbstu.appmath.bazaliy;
 
+import ru.spbstu.appmath.bazaliy.exceptions.rangecalcexceptions.LimitsException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Vector;
-
-class Limits {
-    Limits(String input) throws IOException {
-        String[] arrLimits = input.split(":");
-        if (arrLimits.length == 3) {
-            try {
-                this.min = Double.parseDouble(arrLimits[0]);
-                this.max = Double.parseDouble(arrLimits[1]);
-                this.step = Double.parseDouble(arrLimits[2]);
-            } catch (NumberFormatException e) {
-                throw new IOException("Wrong format");
-            }
-        } else if (arrLimits.length == 2) {
-            try {
-                this.min = Double.parseDouble(arrLimits[0]);
-                this.max = Double.parseDouble(arrLimits[1]);
-                this.step = 1;
-            } catch (NumberFormatException e) {
-                throw new IOException("Wrong format");
-            }
-        } else
-            throw new IOException("Wrong format");
-    }
-    public double getMin() {
-        return min;
-    }
-
-    public double getMax() {
-        return max;
-    }
-
-    public double getStep() {
-        return step;
-    }
-
-    private final double min;
-    private final double max;
-    private final double step;
-
-
-}
 
 public class FileCalc {
 
-    public FileCalc(String inputFile,String outputFile, Limits limits) throws IOException{
-        this(inputFile,outputFile,limits.getMin(),limits.getMax(),limits.getStep());
+    private static final int MAX_EXCEPTION_LENGTH = 27;
+    private final double min;
+    private final double max;
+    private final double step;
+    private final File inFile;
+    private final File outFile;
+
+    public FileCalc(final String inputFile, final String outputFile, final Limits limits) throws LimitsException, IOException {
+        this(inputFile, outputFile, limits.getMin(), limits.getMax(), limits.getStep());
     }
-    public FileCalc(String inputFile, String outputFile, double min, double max) throws IOException {
-        this(inputFile, outputFile, min, max, 1);
-    }
-    public FileCalc(String inputFile, String outputFile, double min, double max, double step) throws IOException {
+
+    public FileCalc(final String inputFile, final String outputFile, final double min, final double max, final double step) throws LimitsException, IOException {
         if (min > max)
-            throw new IOException("Wrong limits");
+            throw new LimitsException();
         this.min = min;
         this.max = max;
         this.step = step;
@@ -71,7 +37,7 @@ public class FileCalc {
     /*
     * Set length for the strings, to get nice output
     * */
-    private static String getFormat(Vector<String> expressions) {
+    private static String getFormat(final ArrayList<String> expressions) {
         int length = MAX_EXCEPTION_LENGTH;
         for (String e : expressions) {
             if (e.length() > length)
@@ -81,8 +47,8 @@ public class FileCalc {
     }
 
 
-    public void Execute() throws Exception {
-        Vector<String> expressions = getExpressions();
+    public void Execute() throws IOException {
+        ArrayList<String> expressions = getExpressions();
         String format = getFormat(expressions);
         PrintWriter pw = new PrintWriter(outFile.getAbsoluteFile());
 
@@ -108,21 +74,14 @@ public class FileCalc {
         pw.close();
     }
 
-    private Vector<String> getExpressions() throws Exception {
+    private ArrayList<String> getExpressions() throws IOException {
         Scanner scanner = new Scanner(inFile);
-        Vector<String> expressions = new Vector<String>();
+        ArrayList<String> expressions = new ArrayList<String>();
         while (scanner.hasNextLine()) {
             expressions.add(scanner.nextLine());
         }
         scanner.close();
         return expressions;
     }
-
-    private double min;
-    private double max;
-    private double step;
-    private File inFile;
-    private File outFile;
-    private static final int MAX_EXCEPTION_LENGTH = 27;
 
 }

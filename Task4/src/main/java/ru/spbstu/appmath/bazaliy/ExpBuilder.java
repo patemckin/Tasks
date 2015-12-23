@@ -2,30 +2,30 @@
 package ru.spbstu.appmath.bazaliy;
 
 
-import ru.spbstu.appmath.bazaliy.MyExceptions.SyntaxException;
+import ru.spbstu.appmath.bazaliy.exceptions.calcexceptions.SyntaxException;
 
 public class ExpBuilder {
 
-    private static String[][] states = new String[][]{
+    private static final String[][] STATES = new String[][]{
             {"+", "-"},
             {"*", "/"},
             null
     };
-    private String expression; // input expression
+    final private String expression; // input expression
     private int pos = 0; // current pos
     private ExpTree expTree; // expression tree
 
-    public ExpBuilder(String expression) throws Exception {
+    public ExpBuilder(final String expression) {
         this.expression = expression;
-        checkExpression();
     }
 
-    public ExpTree build() throws Exception {
+    public ExpTree build() throws SyntaxException {
+        checkExpression();
         this.expTree = makeTree(0);
         return expTree;
     }
 
-    private void checkExpression() throws Exception {
+    private void checkExpression() throws SyntaxException {
         Character[] Symbols = new Character[]{
                 '+', '-', '*', '/',
                 ' ', '\t', '\n', 'x',
@@ -44,10 +44,10 @@ public class ExpBuilder {
     }
 
     /*
-    * Main function, which builds a tree. Parameter state told us which level of different states we are processing right now. */
+    * Main function, which builds a tree. Parameter state told us which level of different STATES we are processing right now. */
 
-    private ExpTree makeTree(int state) throws Exception {
-        if ((state + 1) >= states.length) {
+    private ExpTree makeTree(final int state) throws SyntaxException {
+        if ((state + 1) >= STATES.length) {
             ExpTree ex;
             boolean isMinus = startWith("-");
             if (isMinus)
@@ -77,7 +77,7 @@ public class ExpBuilder {
         return expression.startsWith(s, pos);
     }
 
-    private void skip(String s) {
+    private void skip(final String s) {
         if (startWith(s))
             pos += s.length();
         while (pos < expression.length() && expression.charAt(pos) == ' ')
@@ -86,7 +86,7 @@ public class ExpBuilder {
 
 
     private String readStateOperator(int state) {
-        String[] ops = states[state];
+        String[] ops = STATES[state];
         for (String s : ops) {
             if (startWith(s)) {
                 skip(s);
@@ -96,7 +96,7 @@ public class ExpBuilder {
         return null;
     }
 
-    private ExpTree readSingle() throws Exception {
+    private ExpTree readSingle() throws SyntaxException {
         int p0 = pos;
 
         while (pos < expression.length()) {

@@ -1,0 +1,8 @@
+1+2+3 @ 0.0 @ 6.0 @null
+1/x + 1@ 2.0@ 1.5@null
+-1 + 2 - x@1.0@0.0@null
+x*x - x +1.23 @2.0@ 3.23@null
+150*x - 2/x +3.14@2.0@302.14@null
+Привет@2.0@302.14@Wrong symbols in expression
+1 +1/0@0.0@0.0@Division by zero
+ 1+ (@0.0@0.0@Wrong syntax

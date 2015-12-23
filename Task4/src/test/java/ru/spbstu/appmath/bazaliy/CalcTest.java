@@ -4,10 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.spbstu.appmath.bazaliy.exceptions.calcexceptions.CalculatorException;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
 
 @RunWith(Parameterized.class)
 public class CalcTest {
@@ -18,7 +20,7 @@ public class CalcTest {
     private String exception;
 
     private static ArrayList<Object[]> initializeTestData() throws FileNotFoundException {
-        Scanner f = new Scanner(new File("tests.txt"));
+        Scanner f = new Scanner(CalcTest.class.getClassLoader().getResourceAsStream("tests.txt"));
         ArrayList<Object[]> tests = new ArrayList<Object[]>();
         while (f.hasNextLine()) {
             String line = f.nextLine();
@@ -46,7 +48,7 @@ public class CalcTest {
             ExpTree expTree = new ExpBuilder(expression).build();
             double countedValue = expTree.execute(variable);;
             Assert.assertTrue("Wrong answer", Math.abs(countedValue - result) < epsilon);
-        } catch (Exception e) {
+        } catch (CalculatorException e) {
             Assert.assertTrue("Different exception", exception.equals(e.getMessage()));
         }
     }
