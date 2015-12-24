@@ -26,10 +26,10 @@ public class Research {
         int threads = 1;
 
         PrintWriter printWriter = new PrintWriter("research/" + report);
-        Matrix A = getMatrixFromFile(firstMatrix);
-        Matrix B = getMatrixFromFile(secondMatrix);
+        Matrix a = getMatrixFromFile(firstMatrix);
+        Matrix b = getMatrixFromFile(secondMatrix);
         for (threads = 1; threads <= 1000; threads *= 10) {
-            MatrixMultiplication multiplyMatrix = new MatrixMultiplication(A, B, threads);
+            MatrixMultiplication multiplyMatrix = new MatrixMultiplication(a, b, threads);
             long startTime = System.currentTimeMillis();
             multiplyMatrix.multiply();
             long totalTime = System.currentTimeMillis() - startTime;
