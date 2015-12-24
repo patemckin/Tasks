@@ -1,6 +1,7 @@
 package ru.spbstu.appmath.bazaliyv;
 
-import java.io.IOException;
+import ru.spbstu.appmath.bazaliyv.exceptions.DimensionsException;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -11,10 +12,15 @@ import java.util.concurrent.Future;
 /**
  * Created by admin on 13/12/15.
  */
-class MultiplyMatrix {
+class MatrixMultiplication {
+
+    private final Matrix matrix1;
+    private final Matrix matrix2;
+    private final int multiplyLength;
+    private final int threadsNumber;
 
     private class Result {
-        public Result(Future<Double> value, int x, int y) {
+        public Result(final Future<Double> value, final int x, final int y) {
             this.value = value;
             this.x = x;
             this.y = y;
@@ -32,13 +38,13 @@ class MultiplyMatrix {
             return value.get();
         }
 
-        private int x;
-        private int y;
-        private Future<Double> value;
+        private final int x;
+        private final int y;
+        private final Future<Double> value;
     }
 
     class MultiplyVectorsTask implements Callable<Double> {
-        public MultiplyVectorsTask(int nRow, int nCol) {
+        public MultiplyVectorsTask(final int nRow, final int nCol) {
             this.nCol = nCol;
             this.nRow = nRow;
         }
@@ -49,16 +55,16 @@ class MultiplyMatrix {
         public Double call() throws Exception {
             Double result = 0.0;
             for (int i = 0; i < multiplyLength; i++)
-                result += matrix1.matrix[nRow][i] * matrix2.matrix[i][nCol];
+                result += matrix1.data[nRow][i] * matrix2.data[i][nCol];
             return result;
         }
     }
 
-    public MultiplyMatrix(Matrix matrix1, Matrix matrix2, int threadsNumber) throws IOException {
+    public MatrixMultiplication(final Matrix matrix1, final Matrix matrix2, final int threadsNumber) throws DimensionsException {
         this.matrix1 = matrix1;
         this.matrix2 = matrix2;
         if (matrix1.getColumns() != matrix2.getRows())
-            throw new IOException("Different dimensions");
+            throw new DimensionsException();
         this.multiplyLength = matrix1.getColumns();
         this.threadsNumber = threadsNumber;
     }
@@ -77,16 +83,11 @@ class MultiplyMatrix {
             }
         try {
             for (Result r : set) {
-                result.matrix[r.getX()][r.getY()] = r.getValue();
+                result.data[r.getX()][r.getY()] = r.getValue();
             }
         } catch (Exception ignored) {
         }
         service.shutdown();
         return result;
     }
-
-    private Matrix matrix1;
-    private Matrix matrix2;
-    private int multiplyLength;
-    private int threadsNumber;
 }
