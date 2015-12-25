@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ru.spbstu.appmath.bazaliy.exceptions.calcexceptions.CalculatorException;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -19,15 +18,18 @@ public class CalcTest {
     private Double result;
     private String exception;
 
-    private static ArrayList<Object[]> initializeTestData() throws FileNotFoundException {
-        Scanner f = new Scanner(CalcTest.class.getClassLoader().getResourceAsStream("tests.txt"));
-        ArrayList<Object[]> tests = new ArrayList<Object[]>();
-        while (f.hasNextLine()) {
-            String line = f.nextLine();
-            String[] data = line.split("@");
-            tests.add(new Object[]{data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2]), data[3]});
+    private static ArrayList<Object[]> initializeTestData() throws IllegalArgumentException {
+        try (Scanner f = new Scanner(CalcTest.class.getClassLoader().getResourceAsStream("tests.txt"))) {
+            ArrayList<Object[]> tests = new ArrayList<Object[]>();
+            while (f.hasNextLine()) {
+                String line = f.nextLine();
+                String[] data = line.split("@");
+                tests.add(new Object[]{data[0], Double.parseDouble(data[1]), Double.parseDouble(data[2]), data[3]});
+
+            }
+            f.close();
+            return tests;
         }
-        return tests;
     }
 
     public CalcTest(String expression, Double variable, Double result, String exceptionMessage) {
@@ -38,7 +40,7 @@ public class CalcTest {
     }
 
     @Parameterized.Parameters
-    public static Collection<Object[]> testData() throws Exception{
+    public static Collection<Object[]> testData() throws IllegalArgumentException{
         return initializeTestData();
     }
 
@@ -46,7 +48,8 @@ public class CalcTest {
     public void test() {
         try {
             ExpTree expTree = new ExpBuilder(expression).build();
-            double countedValue = expTree.execute(variable);;
+            double countedValue = expTree.execute(variable);
+            ;
             Assert.assertTrue("Wrong answer", Math.abs(countedValue - result) < epsilon);
         } catch (CalculatorException e) {
             Assert.assertTrue("Different exception", exception.equals(e.getMessage()));

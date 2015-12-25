@@ -7,7 +7,7 @@ public interface ExpTree {
 
     double execute(final double variable) throws CalculationException;
 
-    double execute() throws CalculationException;
+    boolean hasVar();
 
     class Num implements ExpTree {
         private final double value;
@@ -16,14 +16,10 @@ public interface ExpTree {
             value = x;
         }
 
-        public double execute(final double variable) {
+        public double execute(final double variable) throws CalculationException{
             return value;
         }
-
-        public double execute() {
-            return value;
-        }
-
+        public boolean hasVar(){ return false;}
     }
 
     class Var implements ExpTree {
@@ -33,13 +29,10 @@ public interface ExpTree {
             this.name = name;
         }
 
-        public double execute(final double variable) {
+        public double execute(final double variable) throws CalculationException{
             return variable;
         }
-
-        public double execute() throws CalculationException {
-            throw new CalculationException("Expression doesn't contain value of the variable");
-        }
+        public boolean hasVar(){ return true;}
     }
 
     class Unary implements ExpTree {
@@ -49,15 +42,12 @@ public interface ExpTree {
             expr = e;
         }
 
-        public double execute(final double variable) throws CalculationException {
+        public double execute(final double variable) throws CalculationException{
             double o = expr.execute(variable);
             return -o;
         }
 
-        public double execute() throws CalculationException {
-            double o = expr.execute();
-            return -o;
-        }
+        public boolean hasVar(){ return false;}
     }
 
 
@@ -72,17 +62,13 @@ public interface ExpTree {
             this.op = op;
         }
 
-        public double execute(final double variable) throws CalculationException {
+        public double execute(final double variable) throws CalculationException{
             double o1 = x1.execute(variable);
             double o2 = x2.execute(variable);
             return execNum(o1, o2);
         }
 
-        public double execute() throws CalculationException {
-            double o1 = x1.execute();
-            double o2 = x2.execute();
-            return execNum(o1, o2);
-        }
+        public boolean hasVar(){ return x1.hasVar() || x2.hasVar(); }
 
         private double execNum(final double n1, final double n2) throws CalculationException {
             if ("+".equals(op))

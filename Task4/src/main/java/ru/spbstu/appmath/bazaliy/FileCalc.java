@@ -50,38 +50,40 @@ public class FileCalc {
     public void Execute() throws IOException {
         ArrayList<String> expressions = getExpressions();
         String format = getFormat(expressions);
-        PrintWriter pw = new PrintWriter(outFile.getAbsoluteFile());
+        try(PrintWriter pw = new PrintWriter(outFile.getAbsoluteFile())) {
 
-        pw.printf(format, "x");
-        for (String e : expressions) {
-            pw.printf(format, e);
-        }
-        pw.println();
-
-        for (Double value = min; value < max; value += step) {
-            pw.printf(format, value.toString());
+            pw.printf(format, "x");
             for (String e : expressions) {
-                try {
-                    ExpTree expTree = new ExpBuilder(e).build();
-                    Double result = expTree.execute(value);
-                    pw.printf(format, result.toString());
-                } catch (Exception ex) {
-                    pw.printf(format, ex.getMessage());
-                }
+                pw.printf(format, e);
             }
             pw.println();
+
+            for (Double value = min; value < max; value += step) {
+                pw.printf(format, value.toString());
+                for (String e : expressions) {
+                    try {
+                        ExpTree expTree = new ExpBuilder(e).build();
+                        Double result = expTree.execute(value);
+                        pw.printf(format, result.toString());
+                    } catch (Exception ex) {
+                        pw.printf(format, ex.getMessage());
+                    }
+                }
+                pw.println();
+            }
+            pw.close();
         }
-        pw.close();
     }
 
     private ArrayList<String> getExpressions() throws IOException {
-        Scanner scanner = new Scanner(inFile);
-        ArrayList<String> expressions = new ArrayList<String>();
-        while (scanner.hasNextLine()) {
-            expressions.add(scanner.nextLine());
+        try(Scanner scanner = new Scanner(inFile)) {
+            ArrayList<String> expressions = new ArrayList<String>();
+            while (scanner.hasNextLine()) {
+                expressions.add(scanner.nextLine());
+            }
+            scanner.close();
+            return expressions;
         }
-        scanner.close();
-        return expressions;
     }
 
 }

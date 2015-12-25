@@ -16,9 +16,15 @@ public class Calc {
 
             if (args.length == 2) {
                 Double value = Double.parseDouble(args[1]);
+                if (!expTree.hasVar())
+                    throw new SyntaxException("Expression hasn't varible");
+
                 result = expTree.execute(value);
-            } else
-                result = expTree.execute();
+            } else {
+                if (expTree.hasVar())
+                    throw new SyntaxException("Variable hasn't been entered");
+                result = expTree.execute(0);
+            }
             System.out.print(result);
         } catch (CalculatorException e) {
             System.err.print(e.getMessage());
