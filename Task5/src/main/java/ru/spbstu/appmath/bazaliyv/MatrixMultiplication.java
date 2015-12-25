@@ -4,10 +4,7 @@ import ru.spbstu.appmath.bazaliyv.exceptions.DimensionsException;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * Created by admin on 13/12/15.
@@ -34,7 +31,7 @@ class MatrixMultiplication {
             return y;
         }
 
-        public Double getValue() throws Exception {
+        public Double getValue() throws ExecutionException, InterruptedException {
             return value.get();
         }
 
@@ -52,7 +49,7 @@ class MatrixMultiplication {
         private final int nRow;
         private final int nCol;
 
-        public Double call() throws Exception {
+        public Double call() {
             Double result = 0.0;
             for (int i = 0; i < multiplyLength; i++)
                 result += matrix1.data[nRow][i] * matrix2.data[i][nCol];
