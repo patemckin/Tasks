@@ -3,9 +3,7 @@ package ru.spbstu.appmath.bazaliyv;
 import ru.spbstu.appmath.bazaliyv.exceptions.MatrixCalcException;
 import ru.spbstu.appmath.bazaliyv.exceptions.ParserException;
 
-import java.io.IOException;
-
-import static ru.spbstu.appmath.bazaliyv.IOMatrix.*;
+import static ru.spbstu.appmath.bazaliyv.IOMatrix.getMatrixFromFile;
 
 /**
  * Created by admin on 12/12/15.
@@ -57,7 +55,7 @@ public class MatrixCalc {
             Matrix matrix2 = getMatrixFromFile(parser.getInputSecond());
             Matrix result = new MatrixMultiplication(matrix1, matrix2, parser.getThreads()).multiply();
             IOMatrix.printInFile(result, parser.getOutputFile());
-        } catch (MatrixCalcException | IOException e) {
+        } catch (MatrixCalcException e) {
             System.out.println(e.getMessage());
         }
 

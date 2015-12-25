@@ -50,7 +50,7 @@ public class FileCalc {
     public void Execute() throws IOException {
         ArrayList<String> expressions = getExpressions();
         String format = getFormat(expressions);
-        try(PrintWriter pw = new PrintWriter(outFile.getAbsoluteFile())) {
+        try (PrintWriter pw = new PrintWriter(outFile.getAbsoluteFile())) {
 
             pw.printf(format, "x");
             for (String e : expressions) {
@@ -76,7 +76,7 @@ public class FileCalc {
     }
 
     private ArrayList<String> getExpressions() throws IOException {
-        try(Scanner scanner = new Scanner(inFile)) {
+        try (Scanner scanner = new Scanner(inFile)) {
             ArrayList<String> expressions = new ArrayList<String>();
             while (scanner.hasNextLine()) {
                 expressions.add(scanner.nextLine());

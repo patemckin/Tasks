@@ -16,10 +16,13 @@ public interface ExpTree {
             value = x;
         }
 
-        public double execute(final double variable) throws CalculationException{
+        public double execute(final double variable) throws CalculationException {
             return value;
         }
-        public boolean hasVar(){ return false;}
+
+        public boolean hasVar() {
+            return false;
+        }
     }
 
     class Var implements ExpTree {
@@ -29,10 +32,13 @@ public interface ExpTree {
             this.name = name;
         }
 
-        public double execute(final double variable) throws CalculationException{
+        public double execute(final double variable) throws CalculationException {
             return variable;
         }
-        public boolean hasVar(){ return true;}
+
+        public boolean hasVar() {
+            return true;
+        }
     }
 
     class Unary implements ExpTree {
@@ -42,12 +48,14 @@ public interface ExpTree {
             expr = e;
         }
 
-        public double execute(final double variable) throws CalculationException{
+        public double execute(final double variable) throws CalculationException {
             double o = expr.execute(variable);
             return -o;
         }
 
-        public boolean hasVar(){ return false;}
+        public boolean hasVar() {
+            return false;
+        }
     }
 
 
@@ -62,13 +70,15 @@ public interface ExpTree {
             this.op = op;
         }
 
-        public double execute(final double variable) throws CalculationException{
+        public double execute(final double variable) throws CalculationException {
             double o1 = x1.execute(variable);
             double o2 = x2.execute(variable);
             return execNum(o1, o2);
         }
 
-        public boolean hasVar(){ return x1.hasVar() || x2.hasVar(); }
+        public boolean hasVar() {
+            return x1.hasVar() || x2.hasVar();
+        }
 
         private double execNum(final double n1, final double n2) throws CalculationException {
             if ("+".equals(op))

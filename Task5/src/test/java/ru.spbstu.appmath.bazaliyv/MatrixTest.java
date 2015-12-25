@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ru.spbstu.appmath.bazaliyv.exceptions.MatrixCalcException;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -55,7 +54,7 @@ public class MatrixTest {
             Matrix R = getMatrixFromFile("matrix_generator/C1.txt");
             Matrix result = new MatrixMultiplication(A, B, 50).multiply();
             Assert.assertEquals(R, result);
-        } catch (MatrixCalcException | IOException e) {
+        } catch (MatrixCalcException e) {
             e.printStackTrace();
         }
     }
